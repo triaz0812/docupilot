@@ -46,7 +46,7 @@ This project builds a retrieval-augmented generation (RAG) pipeline that scrapes
 
 3. **Configuration**: Copy `.env.example` to `.env` and provide real values:
    - `OPENAI_API_KEY`: Required for embeddings and chat completions.
-   - Optional overrides for scrape depth (`SCRAPER_MAX_DEPTH`), scrape output, or Chroma persistence paths.
+   - Optional overrides for embedding batch size (`EMBED_BATCH_SIZE`), Chroma upsert batching (`CHROMA_UPSERT_BATCH_SIZE`), scrape depth (`SCRAPER_MAX_DEPTH`), scrape output, or Chroma persistence paths.
 
    ### Version Control Setup
 
@@ -113,4 +113,5 @@ Once ingestion completes, start the chat front end with `docker compose up` and 
 
 - Respect target site terms of service and add a contact URL to `SCRAPER_USER_AGENT`.
 - The scraper limits traversal to three-level-deep in-domain links by default; adjust `SCRAPER_MAX_DEPTH` if you need more or less coverage.
+- Large corpora can exceed Chroma's internal batching limit; tune `CHROMA_UPSERT_BATCH_SIZE` if you encounter related errors.
 - ChromaDB persistence keeps your index across runs; delete `data/chroma_store` to rebuild from scratch.

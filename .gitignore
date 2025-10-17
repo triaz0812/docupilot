@@ -62,8 +62,8 @@ logs/
 !.env.example
 
 # Generated data
-#/data/chroma_store/
-#/data/markdown/
+/data/chroma_store/
+/data/markdown/
 
 # Misc
 *.sqlite3

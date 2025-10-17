@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Iterable
+from typing import Dict, Iterable
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
@@ -46,10 +46,14 @@ def _build_front_matter(document: ScrapedDocument) -> str:
     return f"---\ntitle: \"{document.title}\"\nsource_url: {document.url}\n---\n\n"
 
 
-def convert_documents(documents: Iterable[ScrapedDocument], output_dir: Path) -> Iterable[MarkdownDocument]:
+def convert_documents(
+    documents: Iterable[ScrapedDocument],
+    output_dir: Path,
+) -> Iterable[MarkdownDocument]:
     """Yield Markdown documents converted from scraped HTML pages."""
 
     output_dir.mkdir(parents=True, exist_ok=True)
+    slug_counts: Dict[str, int] = {}
 
     for document in documents:
         soup = BeautifulSoup(document.html, "html.parser")
@@ -66,7 +70,10 @@ def convert_documents(documents: Iterable[ScrapedDocument], output_dir: Path) ->
         front_matter = _build_front_matter(document)
         markdown = front_matter + markdown_body + "\n"
 
-        slug = _slugify(document.title or document.url)
+        base_slug = _slugify(document.title or document.url)
+        count = slug_counts.get(base_slug, 0)
+        slug_counts[base_slug] = count + 1
+        slug = base_slug if count == 0 else f"{base_slug}-{count}"
         output_path = output_dir / f"{slug}{_MARKDOWN_EXT}"
         output_path.write_text(markdown, encoding="utf-8")
 

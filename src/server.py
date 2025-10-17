@@ -29,7 +29,9 @@ app.add_middleware(
 _settings = get_settings()
 _embedder = EmbeddingClient(_settings)
 _llm = LLMClient(_settings)
-_vector_store = ChromaVectorStore(_settings.chroma_persist_dir)
+_vector_store = ChromaVectorStore(
+    _settings.chroma_persist_dir, max_batch_size=_settings.chroma_upsert_batch_size
+)
 _engine = QueryEngine(_settings, _embedder, _llm, _vector_store)
 
 static_dir = Path(__file__).resolve().parent.parent / "static"

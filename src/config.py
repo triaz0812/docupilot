@@ -19,6 +19,8 @@ class Settings:
     scrape_output_dir: Path
     chroma_persist_dir: Path
     max_chunks: int
+    embed_batch_size: int
+    chroma_upsert_batch_size: int
     top_k: int
     scraper_user_agent: str
     scraper_timeout: int
@@ -48,6 +50,8 @@ def get_settings() -> Settings:
         scrape_output_dir=scrape_output_dir,
         chroma_persist_dir=chroma_persist_dir,
         max_chunks=int(os.getenv("MAX_CHUNKS", "8")),
+        embed_batch_size=int(os.getenv("EMBED_BATCH_SIZE", "32")),
+        chroma_upsert_batch_size=int(os.getenv("CHROMA_UPSERT_BATCH_SIZE", "5000")),
         top_k=int(os.getenv("TOP_K", "4")),
         scraper_user_agent=os.getenv(
             "SCRAPER_USER_AGENT",

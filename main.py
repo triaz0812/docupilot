@@ -19,7 +19,9 @@ def ingest(url: str) -> None:
     """Scrape a documentation site and index the content."""
     settings = get_settings()
     embedder = EmbeddingClient(settings)
-    vector_store = ChromaVectorStore(settings.chroma_persist_dir)
+    vector_store = ChromaVectorStore(
+        settings.chroma_persist_dir, max_batch_size=settings.chroma_upsert_batch_size
+    )
     pipeline = IngestionPipeline(settings, embedder, vector_store)
 
     stats = pipeline.run(url)
@@ -35,7 +37,9 @@ def ask(
     settings = get_settings()
     embedder = EmbeddingClient(settings)
     llm = LLMClient(settings)
-    vector_store = ChromaVectorStore(settings.chroma_persist_dir)
+    vector_store = ChromaVectorStore(
+        settings.chroma_persist_dir, max_batch_size=settings.chroma_upsert_batch_size
+    )
     engine = QueryEngine(settings, embedder, llm, vector_store)
 
     result = engine.ask(question)

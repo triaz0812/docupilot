@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+.git
+.gitignore
+
+.venv/
+ENV/
+venv/
+
+.env
+.env.*
+!.env.example
+
+.build/
+dist/
+logs/
+node_modules/
+
+# Generated artifacts
+/data/
